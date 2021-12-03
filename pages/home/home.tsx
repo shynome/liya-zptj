@@ -15,7 +15,6 @@ const Home = () => {
   const { state } = HomeState.useContainer()
   return (
     <>
-      <hr />
       <Upload />
       <hr />
       <Download />
