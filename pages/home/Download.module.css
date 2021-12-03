@@ -1,0 +1,17 @@
+.table {
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.table td,
+.table th,
+.table tr {
+  border: none;
+}
+.table td{
+  border: 1px solid;
+}
+.f td {
+  border-top: 1px solid #000;
+  height: 10px;
+}
