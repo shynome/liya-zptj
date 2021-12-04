@@ -1,10 +1,11 @@
 import { useEffect, useReducer } from 'react'
 import { createContainer } from 'unstated-next'
 import XLSX from 'xlsx'
-import { DataStore } from './types'
+import { DataStore, DataStore2 } from './types'
 
 type State = {
   data: DataStore
+  data2: DataStore2
   srcSheet: XLSX.WorkSheet
   srcData: ArrayBuffer
   srcName: string
@@ -23,6 +24,7 @@ function HomeStateReducer(s: State, ns: Partial<State>): State {
 
 const initHomeState: State = {
   data: null,
+  data2: null,
   srcSheet: null,
   srcData: null,
   srcName: '',

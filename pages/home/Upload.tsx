@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import XLSX from 'xlsx'
 import { HomeState } from './home.state'
-import { DataStore, parseItem, User } from './types'
+import { DataStore, DataStore2, parseItem, User } from './types'
 
 const LimitFileTypes = ['.xlsx']
 
@@ -68,18 +68,35 @@ export const ParseXLSX = () => {
     }
     try {
       let store: DataStore = {}
-      let giftKinds: { [gift: string]: 1 } = {}
+      let store2: DataStore2 = {}
       for (let poi in state.srcSheet) {
         if (poi.startsWith('!')) {
           continue
         }
         let v = parseItem(state.srcSheet[poi].v)
-        let u = store[v.id] ?? (store[v.id] = new User(v.id))
-        u.pushNickname(v.nickname)
-        u.pushGift(v.gift, poi)
-        giftKinds[v.gift] = 1
+        {
+          // data
+          let u = store[v.id] ?? (store[v.id] = new User(v.id))
+          u.pushNickname(v.nickname)
+          u.pushGift(v.gift, poi)
+        }
+        {
+          // data2
+          let sheet = store2[v.gift] ?? (store2[v.gift] = {})
+          let u =
+            sheet[v.id] ??
+            (sheet[v.id] = {
+              count: 0,
+              gift: v.gift,
+              id: v.id,
+              nickname: v.nickname,
+              records: [],
+            })
+          u.count += 1
+          u.records.push(poi)
+        }
       }
-      dispatch({ data: store, parsing: false })
+      dispatch({ data: store, data2: store2, parsing: false })
       // console.log(giftKinds)
     } catch (err) {
       dispatch({ err: err })

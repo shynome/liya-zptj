@@ -57,3 +57,12 @@ export function parseItem(str: string): Item {
 }
 
 export type DataStore = { [k: string]: User }
+
+export type Item2 = {
+  id: string
+  nickname: string
+  gift: string
+  count: number
+  records: string[]
+}
+export type DataStore2 = { [k: string]: { [id: string]: Item2 } }

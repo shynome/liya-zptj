@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState, Fragment } from 'react'
 import { HomeState } from './home.state'
-import { isFinishedGift, User } from './types'
+import { isFinishedGift, Item2, User } from './types'
 import XLSX from 'xlsx'
 import styles from './Download.module.css'
 
@@ -80,7 +80,9 @@ export const Download = () => {
         <dt>下载统计数据文件:</dt>
         <dd>
           <button onClick={download}>按用户</button>
-          <button onClick={download}>按礼物</button>
+          <button onClick={() => document.getElementById('sortByGift').click()}>
+            按礼物
+          </button>
         </dd>
       </dl>
       <hr />
@@ -102,6 +104,9 @@ export const Download = () => {
             ref={table}
             hiddenFinishedGift
           />
+        </div>
+        <div className={activeCC(1)(tab)}>
+          <GiftItemTable />
         </div>
         <div className={activeCC(2)(tab)}>
           <DataTable csv={csv} ref={table2} />
@@ -189,3 +194,105 @@ const getGiftOrder = (gift) => {
   }
   return 1
 }
+
+const GiftItemTable = React.forwardRef<HTMLTableElement>((_props, ref) => {
+  const [tab, setTab] = useState(0)
+  const activeCC = (i) => (ni) => {
+    return i === ni ? styles.active : ''
+  }
+  const { state } = HomeState.useContainer()
+  let sortedFields = Object.keys(state.data2)
+    // 按字符排序一次
+    .sort()
+    .sort((a, b) => {
+      return getGiftOrder(a) > getGiftOrder(b) ? -1 : 1
+    })
+  const download = () => {
+    const wb = XLSX.utils.book_new()
+    const widths = [
+      { wch: 20 },
+      { wch: 10 },
+      { wch: 25 },
+      { wch: 6 },
+      { wch: 6 },
+      { wch: 6 },
+      { wch: 150 },
+    ]
+    let tables = document.querySelectorAll('#gift-tables table')
+    let i = 0
+    for (let sheet of sortedFields) {
+      let ws = XLSX.utils.table_to_sheet(tables[i++])
+      ws['!cols'] = widths
+      XLSX.utils.book_append_sheet(wb, ws, sheet)
+    }
+    const old = XLSX.read(state.srcData)
+    let ows = old.Sheets[old.SheetNames[0]]
+    XLSX.utils.book_append_sheet(wb, ows, '元数据')
+    XLSX.writeFile(wb, state.srcName.replace('.xlsx', '-统计结果-按礼物.xlsx'))
+  }
+  return (
+    <div id="gift-tables">
+      <input
+        id="sortByGift"
+        // style={{ display: 'none' }}
+        onClick={download}
+        type="button"
+        value="下载礼物排序数据"
+      />
+      <ol className={styles.navs}>
+        {sortedFields.map((s, i) => {
+          const activeC = tab === i ? styles.active : ''
+          return (
+            <li key={s} onClick={() => setTab(i)} className={activeC}>
+              {s}
+            </li>
+          )
+        })}
+      </ol>
+      <div className={styles.tabsContent}>
+        {sortedFields.map((name, i) => {
+          let items: Item2[] = []
+          for (let k in state.data2[name]) {
+            let u = state.data2[name][k]
+            items.push(u)
+          }
+          items.sort((a, b) => {
+            return a.count > b.count ? -1 : 1
+          })
+          return (
+            <div className={activeCC(i)(tab)} key={name}>
+              <table ref={ref} className={styles.table}>
+                <thead>
+                  <tr>
+                    <td>呢称</td>
+                    <td>用户id(唯一凭证)</td>
+                    <td>礼物</td>
+                    <td>数量</td>
+                    <td>分割(0)</td>
+                    <td>分割(0)</td>
+                    <td>中奖记录(对应行)</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map((t) => {
+                    return (
+                      <tr key={t.id}>
+                        <td>{t.nickname}</td>
+                        <td>{t.id}</td>
+                        <td>{t.gift}</td>
+                        <td>{t.count}</td>
+                        <td></td>
+                        <td></td>
+                        <td>{t.records.join(',')}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+})
