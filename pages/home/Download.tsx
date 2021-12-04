@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, Fragment } from 'react'
+import React, { useEffect, useMemo, useRef, useState, Fragment } from 'react'
 import { HomeState } from './home.state'
 import { isFinishedGift, User } from './types'
 import XLSX from 'xlsx'
@@ -44,10 +44,10 @@ export const Download = () => {
     return d
   }, [state.data])
   const table = useRef<HTMLTableElement>()
+  const table2 = useRef<HTMLTableElement>()
   const download = () => {
     const wb = XLSX.utils.book_new()
-    let ws = XLSX.utils.table_to_sheet(table.current)
-    ws['!cols'] = [
+    const widths = [
       { wch: 20 },
       { wch: 10 },
       { wch: 25 },
@@ -56,20 +56,69 @@ export const Download = () => {
       { wch: 6 },
       { wch: 150 },
     ]
-    XLSX.utils.book_append_sheet(wb, ws, '统计结果')
+    let ws = XLSX.utils.table_to_sheet(table.current)
+    let ws2 = XLSX.utils.table_to_sheet(table2.current)
+    ws['!cols'] = widths
+    ws2['!cols'] = widths
+    XLSX.utils.book_append_sheet(wb, ws, '按用户')
+    XLSX.utils.book_append_sheet(wb, ws, '按用户(原)')
     const old = XLSX.read(state.srcData)
     let ows = old.Sheets[old.SheetNames[0]]
     XLSX.utils.book_append_sheet(wb, ows, '元数据')
-    XLSX.writeFile(wb, state.srcName.replace('.xlsx', '-统计结果.xlsx'))
+    XLSX.writeFile(wb, state.srcName.replace('.xlsx', '-统计结果-按用户.xlsx'))
+  }
+  const [tab, setTab] = useState(0)
+  const activeCC = (i) => (ni) => {
+    return i === ni ? styles.active : ''
   }
   if (!csv) {
     return <div>暂无统计文件可下载</div>
   }
   return (
     <div>
-      <button onClick={download}>点击下载统计数据文件</button>
+      <dl className={styles.dlbtns}>
+        <dt>下载统计数据文件:</dt>
+        <dd>
+          <button onClick={download}>按用户</button>
+          <button onClick={download}>按礼物</button>
+        </dd>
+      </dl>
       <hr />
-      <table ref={table} className={styles.table}>
+      <ol className={styles.navs}>
+        <li className={styles.active}>分类:</li>
+        {['用户', '礼物', '用户(原)'].map((s, i) => {
+          const activeC = tab === i ? styles.active : ''
+          return (
+            <li key={s} onClick={() => setTab(i)} className={activeC}>
+              {s}
+            </li>
+          )
+        })}
+      </ol>
+      <div className={styles.tabsContent}>
+        <div className={activeCC(0)(tab)}>
+          <DataTable
+            csv={csv.filter((t) => t.needSendGiftsCount > 0)}
+            ref={table}
+            hiddenFinishedGift
+          />
+        </div>
+        <div className={activeCC(2)(tab)}>
+          <DataTable csv={csv} ref={table2} />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+type DataTableProps = {
+  csv: User[]
+  hiddenFinishedGift?: boolean
+}
+const DataTable = React.forwardRef<HTMLTableElement, DataTableProps>(
+  ({ csv, hiddenFinishedGift }, ref) => {
+    return (
+      <table ref={ref} className={styles.table}>
         <thead>
           <tr>
             <td>呢称(含曾用)</td>
@@ -84,6 +133,12 @@ export const Download = () => {
         <tbody>
           {csv.map((u) => {
             let sortedFields = Object.keys(u.gifts)
+              .filter((g) => {
+                if (hiddenFinishedGift) {
+                  return !isFinishedGift(g)
+                }
+                return true
+              })
               // 按字符排序一次
               .sort()
               .sort((a, b) => {
@@ -124,9 +179,9 @@ export const Download = () => {
           })}
         </tbody>
       </table>
-    </div>
-  )
-}
+    )
+  },
+)
 
 const getGiftOrder = (gift) => {
   if (isFinishedGift(gift)) {
