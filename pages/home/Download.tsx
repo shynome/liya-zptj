@@ -236,7 +236,7 @@ const GiftItemTable = React.forwardRef<HTMLTableElement>((_props, ref) => {
         id="sortByGift"
         // style={{ display: 'none' }}
         onClick={download}
-        type="button"
+        type="hidden"
         value="下载礼物排序数据"
       />
       <ol className={styles.navs}>
