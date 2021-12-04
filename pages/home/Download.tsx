@@ -61,7 +61,7 @@ export const Download = () => {
     ws['!cols'] = widths
     ws2['!cols'] = widths
     XLSX.utils.book_append_sheet(wb, ws, '按用户')
-    XLSX.utils.book_append_sheet(wb, ws, '按用户(原)')
+    XLSX.utils.book_append_sheet(wb, ws2, '按用户(原)')
     const old = XLSX.read(state.srcData)
     let ows = old.Sheets[old.SheetNames[0]]
     XLSX.utils.book_append_sheet(wb, ows, '元数据')
