@@ -29,7 +29,7 @@
 </script>
 
 <div>
-	<label for="xlsx-file"> {$state.srcName ? '上传新文件' : '上传文件'} </label>
+	<label for="xlsx-file">{$state.srcName ? '上传新文件' : '上传文件'} </label>
 	<input
 		id="xlsx-file"
 		type="file"
@@ -37,6 +37,7 @@
 		disabled={$state.parsing}
 		on:change={(e) => handleChange(e.currentTarget)}
 	/>
+	<a rel="external" href="/v1" style="float: right;">旧版</a>
 	{#if $state.parsing}
 		解析中...
 	{/if}
