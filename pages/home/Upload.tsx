@@ -53,6 +53,9 @@ export const Upload = () => {
           accept={LimitFileTypes.join(', ')}
           disabled={state.parsing}
         />
+        <a href="/" style={{ float: 'right' }}>
+          新版
+        </a>
       </div>
       {state.parsing && <div>{state.srcName} 解析中...</div>}
       <ParseXLSX />
