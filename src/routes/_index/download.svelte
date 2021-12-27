@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { state } from './state'
 	import TableByGift from './table-by-gift.svelte'
+	import TableByUser from './table-by-user.svelte'
 	const tabs = ['用户', '礼物', '用户(原)']
 	let activeTab = tabs[0]
 </script>
@@ -12,8 +13,8 @@
 		<dl class="dlbtns">
 			<dt>下载统计数据文件:</dt>
 			<dd>
-				<button onClick={() => 0}>按用户</button>
-				<button onClick={() => document.getElementById('sortByGift').click()}> 按礼物 </button>
+				<button on:click={() => document.getElementById('sortByUser').click()}>按用户</button>
+				<button on:click={() => document.getElementById('sortByGift').click()}>按礼物</button>
 			</dd>
 		</dl>
 		<hr />
@@ -26,13 +27,13 @@
 	</div>
 	<div class="tabsContent">
 		<div class:active={activeTab === tabs[0]}>
-			<TableByGift />
+			<TableByUser hiddenFinishedGift />
 		</div>
 		<div class:active={activeTab === tabs[1]}>
 			<TableByGift />
 		</div>
 		<div class:active={activeTab === tabs[2]}>
-			<TableByGift />
+			<TableByUser />
 		</div>
 	</div>
 {/if}

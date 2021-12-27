@@ -48,7 +48,7 @@
 </script>
 
 <div id="gift-tables">
-	<input id="sortByGift" type="button" value="下载礼物排序数据" on:click={download} />
+	<input id="sortByGift" type="hidden" value="下载礼物排序数据" on:click={download} />
 	<ol class="navs">
 		{#each tabs as tab}
 			<li class:active={activeTab === tab} on:click={() => (activeTab = tab)}>{tab}</li>
@@ -60,7 +60,7 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<td>呢称</td>
+							<td>呢称(首次使用)</td>
 							<td>用户id(唯一凭证)</td>
 							<td>礼物</td>
 							<td>数量</td>
