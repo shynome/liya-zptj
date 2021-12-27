@@ -1,6 +1,6 @@
 _exit:
 	exit 0
 sync:
-	rsync --delete-delay -avzP ./out/ shy-coal:/usr/share/ly/zptj
+	rsync --delete-delay -avzP ./build/ shy-coal:/usr/share/ly/zptj
 export:
-	yarn next build && yarn next export
+	yarn build

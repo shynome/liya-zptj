@@ -1,0 +1,50 @@
+.table {
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+
+.table td,
+.table th,
+.table tr {
+  border: none;
+}
+.table td {
+  border: 1px solid;
+}
+.f td {
+  border-top: 1px solid #000;
+  height: 10px;
+}
+
+.navs {
+  padding: 0;
+}
+.navs li {
+  display: inline-block;
+  margin: 3px 10px;
+  cursor: pointer;
+  color: #a5a5a5;
+}
+.navs li.active {
+  color: #000;
+}
+
+.tabsContent > div {
+  display: none;
+}
+
+.tabsContent > div.active {
+  display: block;
+}
+
+.dlbtns dt,
+.dlbtns dd {
+  display: inline-block;
+}
+.dlbtns dd {
+  margin: 0 10px;
+}
+.dlbtns dd button {
+  margin: 0 10px;
+  cursor: pointer;
+}
