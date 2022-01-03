@@ -37,6 +37,14 @@
 		disabled={$state.parsing}
 		on:change={(e) => handleChange(e.currentTarget)}
 	/>
+	<a
+		rel="external"
+		href="https://github.com/shynome/liya-zptj"
+		target="liya-zptj"
+		style="float: right;margin-left: 1rem;"
+	>
+		Github
+	</a>
 	<a rel="external" href="/v1" style="float: right;">旧版</a>
 	{#if $state.parsing}
 		解析中...
