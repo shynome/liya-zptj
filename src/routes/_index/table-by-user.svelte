@@ -11,24 +11,28 @@
 		})
 
 	// sortedFields
-	$: dcsv = csv.map((u) => {
-		let sortedFields = Object.keys(u.gifts)
-			.filter((g) => {
-				if (hiddenFinishedGift) {
-					return !isFinishedGift(g)
-				}
-				return true
-			})
-			// 按字符排序一次
-			.sort()
-			.sort((a, b) => {
-				return getGiftOrder(a) > getGiftOrder(b) ? -1 : 1
-			})
-		return {
-			u,
-			sortedFields,
-		}
-	})
+	$: dcsv = csv
+		.map((u) => {
+			let sortedFields = Object.keys(u.gifts)
+				.filter((g) => {
+					if (hiddenFinishedGift) {
+						return !isFinishedGift(g)
+					}
+					return true
+				})
+				// 按字符排序一次
+				.sort()
+				.sort((a, b) => {
+					return getGiftOrder(a) > getGiftOrder(b) ? -1 : 1
+				})
+			return {
+				u,
+				sortedFields,
+			}
+		})
+		.filter(({ sortedFields }) => {
+			return sortedFields.length > 0
+		})
 
 	function download() {
 		const wb = XLSX.utils.book_new()
