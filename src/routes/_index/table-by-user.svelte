@@ -1,38 +1,9 @@
 <script lang="ts">
-	import { getGiftOrder } from './table'
-	import { isFinishedGift, User } from './types'
 	import { state } from './state'
 	import XLSX from 'xlsx'
+	import { dcsv, dcsv2 } from './table.store'
+	import { fstore } from './filter.store'
 	export let hiddenFinishedGift: boolean = false
-	let csv: User[] = Object.keys($state.table1)
-		.map((k) => $state.table1[k])
-		.sort((a, b) => {
-			return a.needSendGiftsCount > b.needSendGiftsCount ? -1 : 1
-		})
-
-	// sortedFields
-	$: dcsv = csv
-		.map((u) => {
-			let sortedFields = Object.keys(u.gifts)
-				.filter((g) => {
-					if (hiddenFinishedGift) {
-						return !isFinishedGift(g)
-					}
-					return true
-				})
-				// 按字符排序一次
-				.sort()
-				.sort((a, b) => {
-					return getGiftOrder(a) > getGiftOrder(b) ? -1 : 1
-				})
-			return {
-				u,
-				sortedFields,
-			}
-		})
-		.filter(({ sortedFields }) => {
-			return sortedFields.length > 0
-		})
 
 	function download() {
 		const wb = XLSX.utils.book_new()
@@ -74,7 +45,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		{#each dcsv as { u, sortedFields } (u.id)}
+		{#each hiddenFinishedGift ? $dcsv2 : $dcsv as { u, sortedFields } (u.id)}
 			<tr class="f">
 				<td colspan="7" />
 			</tr>
@@ -90,7 +61,9 @@
 					<td>{u.gifts[gift].count}</td>
 					<td />
 					{#if i === 0}
-						<td rowspan={sortedFields.length}>{u.needSendGiftsCount}</td>
+						<td rowspan={sortedFields.length}>
+							{hiddenFinishedGift ? u.getNeedSendGiftsCount($fstore) : u.needSendGiftsCount}
+						</td>
 					{/if}
 					<td>{u.gifts[gift].pois.join(',')}</td>
 				</tr>

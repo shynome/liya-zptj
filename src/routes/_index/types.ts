@@ -8,7 +8,18 @@ export class User {
 			pois: string[]
 		}
 	} = {}
+	/**@deprecated */
 	needSendGiftsCount: number = 0
+	getNeedSendGiftsCount = (hgift: string[]) => {
+		let count = 0
+		for (let k in this.gifts) {
+			if (isFinishedGift(hgift)(k)) {
+				continue
+			}
+			count += this.gifts[k].count
+		}
+		return count
+	}
 	constructor(id: string) {
 		this.id = id
 	}
@@ -24,21 +35,16 @@ export class User {
 		let sameGifts = this.gifts[gift] ?? (this.gifts[gift] = { count: 0, pois: [] })
 		sameGifts.count += 1
 		sameGifts.pois.push(poi)
-		if (!isFinishedGift(gift)) {
+		// if (!isFinishedGift(gift)) {
+		if (true) {
 			this.needSendGiftsCount += 1
 		}
 	}
 }
 
 /**是否是直播间已经完成了的礼物 */
-export function isFinishedGift(gift: string) {
-	if (/下次/.test(gift)) {
-		return true
-	}
-	if (/喵喵叫/.test(gift)) {
-		return true
-	}
-	return false
+export const isFinishedGift = (hgift: string[]) => (gift: string) => {
+	return hgift.includes(gift)
 }
 
 const testStr = '[2021/11/29 15:02:45] 兔兔真好吃多放辣(4827110) 抽中 莉娅喵喵叫5声'

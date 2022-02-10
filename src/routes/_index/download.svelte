@@ -2,6 +2,7 @@
 	import { state } from './state'
 	import TableByGift from './table-by-gift.svelte'
 	import TableByUser from './table-by-user.svelte'
+	import Filter from './filter.svelte'
 	const tabs = ['用户', '礼物', '用户(原)']
 	let activeTab = tabs[0]
 </script>
@@ -17,6 +18,8 @@
 				<button on:click={() => document.getElementById('sortByGift').click()}>按礼物</button>
 			</dd>
 		</dl>
+		<hr />
+		<Filter />
 		<hr />
 		<ol class="navs">
 			<li class="active">分类:</li>
