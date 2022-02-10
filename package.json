@@ -12,9 +12,9 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "next",
+    "@sveltejs/adapter-auto": "^1.0.0-next.17",
     "@sveltejs/adapter-static": "^1.0.0-next.22",
-    "@sveltejs/kit": "next",
+    "@sveltejs/kit": "^1.0.0-next.263",
     "prettier": "^2.4.1",
     "prettier-plugin-svelte": "^2.4.0",
     "svelte": "^3.44.0",
@@ -25,6 +25,7 @@
   },
   "type": "module",
   "dependencies": {
+    "lodash.chunk": "^4.2.0",
     "normalize.css": "^8.0.1",
     "xlsx": "^0.17.4"
   }
