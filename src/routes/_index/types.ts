@@ -47,7 +47,7 @@ export const isFinishedGift = (hgift: string[]) => (gift: string) => {
 	return hgift.includes(gift)
 }
 
-const testStr = '[2021/11/29 15:02:45] 兔兔真好吃多放辣(4827110) 抽中 莉娅喵喵叫5声'
+const testStr = '[2021/11/29 15:02:45] 用户名用户名(1000001) 抽中 喵喵叫5声'
 export type Item = {
 	id: string
 	nickname: string

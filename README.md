@@ -1,38 +1,13 @@
-# create-svelte
+# 项目介绍
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+该项目用于再处理 "咩播云插件（原：跨播）" - "小转盘" 数据, 使其更加直观
 
-## Creating a project
+所有数据均在浏览器本地处理, 避免泄露中奖用户信息给无关人员
 
-If you're seeing this, you've probably already done this step. Congrats!
+# 输入数据格式
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
+`跨播月份统计.xlsx`, 输入数据格式即可使用
 
-# create a new project in my-app
-npm init svelte@next my-app
+```txt
+[2021/11/29 15:02:45] 用户名用户名(1000001) 抽中 喵喵叫5声
 ```
-
-> Note: the `@next` is temporary
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
-
-```bash
-npm run build
-```
-
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
