@@ -57,7 +57,9 @@ function parseData(srcSheet: XLSX.Sheet) {
 function createState() {
 	const { subscribe, set, update } = writable(initState)
 	const showError = (err) => update((a) => ({ ...a, err: err }))
-	function parse(srcSheet: XLSX.Sheet, srcName: string, srcData: ArrayBuffer) {
+	async function parse(srcSheet: XLSX.Sheet, srcName: string, srcData: ArrayBuffer) {
+		update((a) => ({ ...a, parsing: true, err: null }))
+		// await new Promise((rl) => setTimeout(rl, 2e3))
 		try {
 			let { store, store2 } = parseData(srcSheet)
 			set({
