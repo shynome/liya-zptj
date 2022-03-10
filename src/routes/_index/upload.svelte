@@ -50,3 +50,12 @@
 		解析中...
 	{/if}
 </div>
+{#if $state.err !== null}
+	<hr />
+	<div>
+		出错了:
+		<code>
+			{$state.err?.message ?? JSON.stringify($state.err)}
+		</code>
+	</div>
+{/if}

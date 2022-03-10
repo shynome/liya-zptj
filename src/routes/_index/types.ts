@@ -56,6 +56,9 @@ export type Item = {
 export function parseItem(str: string): Item {
 	const itemRex = /^\[.+\] (\S+)\((\d+)\) 抽中 (\S+)$/
 	let x = str.match(itemRex)
+	if (x === null) {
+		throw new Error(`错误数据: ${str}`)
+	}
 	let [nickname, id, gift] = x.slice(1)
 	return { id, nickname, gift }
 }
